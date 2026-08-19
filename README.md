@@ -1,12 +1,13 @@
+[README — Peba Screen Stream.md](https://github.com/user-attachments/files/31227889/README.Peba.Screen.Stream.md)
 # Peba Screen Stream
 
-Um projeto simples de **transmissão de tela em tempo real** desenvolvido em Python utilizando Flask, Flask-SocketIO e PyAutoGUI.
+Um projeto simples de **transmissão de tela em tempo real para redes locais**, desenvolvido em Python utilizando Flask, Flask-SocketIO e PyAutoGUI.
 
 O projeto captura a tela do computador, redimensiona e comprime cada frame em JPEG e transmite as imagens para os clientes conectados através de uma conexão Socket.IO.
 
-O cliente não precisa instalar nenhum programa: basta acessar o endereço do servidor pelo navegador.
+O cliente não precisa instalar nenhum programa: basta acessar o endereço do servidor pelo navegador através da rede local.
 
-> **Projeto experimental/educacional.** Não foi desenvolvido com foco em segurança, eficiência ou uso em produção.
+> **Projeto experimental/educacional.** O foco do projeto é aprendizado e utilização em redes locais, não sendo destinado a substituir soluções profissionais de transmissão ou acesso remoto.
 
 ---
 
@@ -78,7 +79,7 @@ No próprio computador, acesse:
 http://127.0.0.1:5000
 ```
 
-Para acessar a transmissão a partir de outro dispositivo conectado à mesma rede local, descubra o IPv4 do computador que está executando o servidor e acesse:
+Para acessar a transmissão a partir de outro dispositivo conectado à **mesma rede local**, descubra o IPv4 do computador que está executando o servidor e acesse:
 
 ```text
 http://SEU_IP:5000
@@ -90,9 +91,11 @@ Por exemplo:
 http://192.168.1.10:5000
 ```
 
+> O projeto foi pensado justamente para esse cenário: um computador hospeda a transmissão e outros dispositivos da mesma rede podem visualizá-la através do navegador.
+
 ---
 
-## ⚙️ Como funciona
+## Como funciona
 
 O funcionamento básico do projeto é:
 
@@ -141,9 +144,11 @@ atualiza_tela
 
 O navegador recebe a imagem em Base64 e atualiza o atributo `src` de uma tag `<img>`.
 
+Quando o último espectador se desconecta, a captura é interrompida.
+
 ---
 
-## Limite de espectadores
+## Gerenciamento de espectadores
 
 O projeto possui um limite padrão de:
 
@@ -155,13 +160,7 @@ Isso significa que até cinco clientes podem assistir simultaneamente.
 
 Quando o limite é atingido, novos clientes são desconectados.
 
-Esse valor pode ser alterado diretamente no código.
-
----
-
-## Controle da transmissão
-
-A transmissão possui um comportamento simples:
+Esse sistema também permite que a transmissão seja iniciada e interrompida automaticamente de acordo com a quantidade de espectadores:
 
 ```text
 Nenhum espectador
@@ -172,7 +171,7 @@ Novo espectador
        ↓
  transmissão iniciada
 
-Espectador conectado
+Espectadores conectados
        ↓
  captura e envio de frames
 
@@ -181,7 +180,7 @@ Espectador conectado
    transmissão parada
 ```
 
-Isso evita que o computador continue capturando a tela quando ninguém está assistindo.
+Esse comportamento evita capturas desnecessárias quando ninguém está assistindo.
 
 ---
 
@@ -196,6 +195,8 @@ Atualmente:
 ```python
 tela.thumbnail((1280, 720))
 ```
+
+A resolução pode ser ajustada de acordo com a necessidade da rede e dos dispositivos que irão visualizar a transmissão.
 
 ### Qualidade JPEG
 
@@ -221,19 +222,21 @@ Atualmente:
 socketio.sleep(0.01)
 ```
 
-Esse valor pode ser ajustado para controlar a velocidade da transmissão.
+Esse valor influencia a frequência com que novos frames são capturados e enviados.
 
 ---
 
-## Limitações
+## Considerações
 
-Este projeto foi desenvolvido principalmente para fins de aprendizado e possui algumas limitações.
+O projeto foi desenvolvido com **redes locais em mente**.
+
+Ele não tem como objetivo ser uma ferramenta de acesso remoto pela internet ou substituir soluções como ferramentas profissionais de streaming e acesso remoto.
 
 ### Uso de Base64
 
 As imagens são convertidas para Base64 antes de serem enviadas.
 
-Isso facilita a implementação, mas adiciona overhead em relação ao envio direto dos bytes da imagem.
+Isso simplifica o transporte das imagens através dos eventos Socket.IO, mas adiciona overhead em relação ao envio direto dos bytes.
 
 ### Captura da tela inteira
 
@@ -243,37 +246,17 @@ Não existe suporte para selecionar uma janela específica.
 
 ### Consumo de recursos
 
-Capturar, redimensionar, comprimir e enviar imagens continuamente pode consumir uma quantidade considerável de CPU, memória e banda.
+Capturar, redimensionar, comprimir e transmitir imagens continuamente utiliza CPU, memória e largura de banda.
 
-### Sem autenticação
+Por isso, resolução, qualidade e frequência dos frames possuem impacto direto no desempenho.
 
-O projeto atualmente não possui um sistema adequado de autenticação.
+### Segurança
 
-**Não exponha o servidor diretamente à internet sem implementar mecanismos de segurança.**
+Embora o projeto tenha como objetivo o uso em redes locais, ele **não possui autenticação**.
 
-### Rede local
+Por isso, deve ser utilizado apenas em redes nas quais os dispositivos conectados sejam confiáveis.
 
-O projeto foi pensado inicialmente para utilização dentro de uma rede local.
-
-Para disponibilizá-lo na internet seriam necessárias outras considerações relacionadas a firewall, NAT, exposição de portas, autenticação e segurança.
-
----
-
-## Segurança
-
-Este projeto **não deve ser considerado seguro para exposição pública** em sua forma atual.
-
-Qualquer pessoa que consiga acessar o servidor poderá potencialmente visualizar a transmissão.
-
-Antes de utilizar o projeto fora de uma rede confiável, considere implementar:
-
-- autenticação;
-- autorização;
-- HTTPS;
-- tokens de acesso;
-- controle de sessões;
-- validação dos clientes;
-- proteção contra abuso.
+Não é recomendado expor a porta do servidor diretamente à internet.
 
 ---
 
@@ -293,27 +276,27 @@ Este projeto foi criado como um experimento para aprender conceitos relacionados
 
 A ideia surgiu a partir de uma implementação anterior utilizando sockets TCP e um cliente Python com Tkinter.
 
-A principal evolução foi substituir o cliente Python por um **navegador**, permitindo que o espectador visualize a transmissão sem precisar instalar um programa específico.
+Na implementação anterior, era necessário executar um programa cliente para receber as imagens.
+
+A principal evolução deste projeto foi substituir esse cliente por um **navegador**, permitindo que qualquer dispositivo conectado à mesma rede local possa visualizar a transmissão sem precisar instalar um programa específico.
 
 ---
 
 ## Possíveis melhorias
 
-Algumas ideias para versões futuras:
+Algumas melhorias planejadas ou consideradas para versões futuras:
 
-- [ ] Envio direto de bytes em vez de Base64
 - [ ] Controle de FPS
-- [ ] Interface de configuração
 - [ ] Seleção de resolução
-- [ ] Controle de qualidade JPEG pelo navegador
-- [ ] Captura de uma janela específica
-- [ ] Autenticação
-- [ ] HTTPS
+- [ ] Controle de qualidade JPEG
 - [ ] Melhor gerenciamento de espectadores
+- [ ] Interface para configurar a transmissão
+- [ ] Exibição de FPS atual
+- [ ] Exibição do consumo aproximado de banda
 - [ ] Otimização da captura e compressão
-- [ ] Detecção de mudanças entre frames
-- [ ] Controles remotos
-- [ ] Estatísticas de FPS e consumo de banda
+- [ ] Envio direto dos bytes da imagem em vez de Base64
+- [ ] Melhor gerenciamento da tarefa de transmissão
+- [ ] Seleção de uma janela específica para captura
 
 ---
 
