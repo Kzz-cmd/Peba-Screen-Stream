@@ -143,7 +143,7 @@ O navegador recebe a imagem em Base64 e atualiza o atributo `src` de uma tag `<i
 
 ---
 
-## 👥 Limite de espectadores
+## Limite de espectadores
 
 O projeto possui um limite padrão de:
 
@@ -159,7 +159,7 @@ Esse valor pode ser alterado diretamente no código.
 
 ---
 
-## 🎥 Controle da transmissão
+## Controle da transmissão
 
 A transmissão possui um comportamento simples:
 
@@ -185,7 +185,7 @@ Isso evita que o computador continue capturando a tela quando ninguém está ass
 
 ---
 
-## 🔧 Configurações
+## Configurações
 
 Algumas configurações podem ser alteradas diretamente no código.
 
@@ -225,7 +225,7 @@ Esse valor pode ser ajustado para controlar a velocidade da transmissão.
 
 ---
 
-## ⚠️ Limitações
+## Limitações
 
 Este projeto foi desenvolvido principalmente para fins de aprendizado e possui algumas limitações.
 
@@ -259,7 +259,7 @@ Para disponibilizá-lo na internet seriam necessárias outras considerações re
 
 ---
 
-## 🔒 Segurança
+## Segurança
 
 Este projeto **não deve ser considerado seguro para exposição pública** em sua forma atual.
 
@@ -277,7 +277,7 @@ Antes de utilizar o projeto fora de uma rede confiável, considere implementar:
 
 ---
 
-## 📚 Objetivo do projeto
+## Objetivo do projeto
 
 Este projeto foi criado como um experimento para aprender conceitos relacionados a:
 
@@ -297,7 +297,7 @@ A principal evolução foi substituir o cliente Python por um **navegador**, per
 
 ---
 
-## 🗺️ Possíveis melhorias
+## Possíveis melhorias
 
 Algumas ideias para versões futuras:
 
