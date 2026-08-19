@@ -317,6 +317,6 @@ Algumas ideias para versões futuras:
 
 ---
 
-## 📄 Licença
+## Licença
 
 Este projeto pode ser utilizado, estudado e modificado conforme os termos definidos pela licença deste repositório.
