@@ -1,4 +1,3 @@
-[README — Peba Screen Stream.md](https://github.com/user-attachments/files/31227889/README.Peba.Screen.Stream.md)
 # Peba Screen Stream
 
 Um projeto simples de **transmissão de tela em tempo real para redes locais**, desenvolvido em Python utilizando Flask, Flask-SocketIO e PyAutoGUI.
